@@ -116,7 +116,15 @@ button {
 }
 
 .is-premium {
-  border-left: 0.25em solid var(--secondary);
-  padding-left: 0.25em;
-  margin-left: -0.5em;
+  margin: 0.5em 0;
+  border: solid 2px var(--tertiary);
+  border-radius: 5px;
+  padding: 0.5em;
+}
+
+.message {
+  margin: 0.5em 0;
+  border: solid 1px var(--primary);
+  border-radius: 5px;
+  padding: 0.5em;
 }
