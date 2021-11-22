@@ -32420,7 +32420,6 @@ function Messages({
   }, i) => {
     // TODO: format as cards, add timestamp
     const date = new Date(timestamp / 1e6);
-    console.log(date);
     return /*#__PURE__*/_react.default.createElement("p", {
       key: i,
       className: premium ? 'is-premium' : 'message'
@@ -32430,6 +32429,34 @@ function Messages({
 
 Messages.propTypes = {
   messages: _propTypes.default.array
+};
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"components/ErrorMessage.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ErrorMessage;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ErrorMessage({
+  message,
+  onClick
+}) {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h2", null, "Error"), /*#__PURE__*/_react.default.createElement("p", {
+    className: "error"
+  }, /*#__PURE__*/_react.default.createElement("strong", null, message)), /*#__PURE__*/_react.default.createElement("button", {
+    onClick: onClick
+  }, "Ok"));
+}
+
+ErrorMessage.propTypes = {
+  message: _propTypes.default.string
 };
 },{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"App.js":[function(require,module,exports) {
 "use strict";
@@ -32453,6 +32480,8 @@ var _SignIn = _interopRequireDefault(require("./components/SignIn"));
 
 var _Messages = _interopRequireDefault(require("./components/Messages"));
 
+var _ErrorMessage = _interopRequireDefault(require("./components/ErrorMessage"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -32469,6 +32498,7 @@ const App = ({
   wallet
 }) => {
   const [messages, setMessages] = (0, _react.useState)([]);
+  const [error, setError] = (0, _react.useState)(null);
   (0, _react.useEffect)(() => {
     // TODO: don't just fetch once; subscribe!
     contract.getMessages().then(setMessages);
@@ -32495,6 +32525,12 @@ const App = ({
         fieldset.disabled = false;
         message.focus();
       });
+    }).catch(e => {
+      if (/already-signed/.test(e.message)) {
+        setError('You have already signed the Guest Book!');
+      }
+
+      fieldset.disabled = false;
     });
   };
 
@@ -32514,7 +32550,10 @@ const App = ({
   }, "Log in")), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
     onSubmit: onSubmit,
     currentUser: currentUser
-  }) : /*#__PURE__*/_react.default.createElement(_SignIn.default, null), !!currentUser && !!messages.length && /*#__PURE__*/_react.default.createElement(_Messages.default, {
+  }) : /*#__PURE__*/_react.default.createElement(_SignIn.default, null), error && /*#__PURE__*/_react.default.createElement(_ErrorMessage.default, {
+    message: error,
+    onClick: () => setError(null)
+  }), !!currentUser && !!messages.length && /*#__PURE__*/_react.default.createElement(_Messages.default, {
     messages: messages
   }));
 };
@@ -32538,8 +32577,8 @@ App.propTypes = {
 };
 var _default = App;
 exports.default = _default;
-},{"regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js","./components/Form":"components/Form.jsx","./components/SignIn":"components/SignIn.jsx","./components/Messages":"components/Messages.jsx"}],"config.js":[function(require,module,exports) {
-const CONTRACT_NAME = "dev-1637464500546-52668695395336" || 'guest-book.testnet';
+},{"regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js","./components/Form":"components/Form.jsx","./components/SignIn":"components/SignIn.jsx","./components/Messages":"components/Messages.jsx","./components/ErrorMessage":"components/ErrorMessage.jsx"}],"config.js":[function(require,module,exports) {
+const CONTRACT_NAME = "dev-1637464500546-52668695395336" || 'guest-book.dobleuber.testnet';
 
 function getConfig(env) {
   switch (env) {
@@ -52429,7 +52468,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53311" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56223" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
