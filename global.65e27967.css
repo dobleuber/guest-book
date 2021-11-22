@@ -114,7 +114,6 @@ button:active {
 
 .is-premium {
   --borderWidth: 3px;
-  background: #1D1F20;
   position: relative;
   border-radius: var(--borderWidth);
   padding: 2em 0.5em;
