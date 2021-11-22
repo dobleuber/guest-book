@@ -5,12 +5,14 @@ import Big from 'big.js';
 import Form from './components/Form';
 import SignIn from './components/SignIn';
 import Messages from './components/Messages';
+import ErrorMessage from './components/ErrorMessage';
 
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // TODO: don't just fetch once; subscribe!
@@ -39,6 +41,12 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
         fieldset.disabled = false;
         message.focus();
       });
+    }).catch(e => {
+      if (/already-signed/.test(e.message)) {
+        setError('You have already signed the Guest Book!');
+      }
+
+      fieldset.disabled = false;
     });
   };
 
@@ -67,6 +75,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
         ? <Form onSubmit={onSubmit} currentUser={currentUser} />
         : <SignIn/>
       }
+      { error && <ErrorMessage message={error} onClick={() => setError(null) }/> }
       { !!currentUser && !!messages.length && <Messages messages={messages}/> }
     </main>
   );
