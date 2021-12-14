@@ -32341,7 +32341,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function Form({
   onSubmit,
-  currentUser
+  currentUser,
+  isSubmitting
 }) {
   return /*#__PURE__*/_react.default.createElement("form", {
     onSubmit: onSubmit
@@ -32368,7 +32369,12 @@ function Form({
     type: "number"
   }), /*#__PURE__*/_react.default.createElement("span", {
     title: "NEAR Tokens"
-  }, "\u24C3")), /*#__PURE__*/_react.default.createElement("button", {
+  }, "\u24C3")), isSubmitting ? /*#__PURE__*/_react.default.createElement("button", {
+    disabled: true,
+    className: "submitting"
+  }, "Signing the book... ", /*#__PURE__*/_react.default.createElement("div", {
+    class: "loader"
+  })) : /*#__PURE__*/_react.default.createElement("button", {
     type: "submit"
   }, "Sign")));
 }
@@ -32499,6 +32505,7 @@ const App = ({
 }) => {
   const [messages, setMessages] = (0, _react.useState)([]);
   const [error, setError] = (0, _react.useState)(null);
+  const [isSubmitting, setIsSubmitting] = (0, _react.useState)(false);
   (0, _react.useEffect)(() => {
     // TODO: don't just fetch once; subscribe!
     contract.getMessages().then(setMessages);
@@ -32511,7 +32518,8 @@ const App = ({
       message,
       donation
     } = e.target.elements;
-    fieldset.disabled = true; // TODO: optimistically update page with new message,
+    fieldset.disabled = true;
+    setIsSubmitting(true); // TODO: optimistically update page with new message,
     // update blockchain data in background
     // add uuid to each message, so we know which one is already known
 
@@ -32524,6 +32532,7 @@ const App = ({
         donation.value = SUGGESTED_DONATION;
         fieldset.disabled = false;
         message.focus();
+        setIsSubmitting(false);
       });
     }).catch(e => {
       if (/already-signed/.test(e.message)) {
@@ -32531,6 +32540,7 @@ const App = ({
       }
 
       fieldset.disabled = false;
+      setIsSubmitting(false);
     });
   };
 
@@ -32549,7 +32559,8 @@ const App = ({
     onClick: signIn
   }, "Log in")), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
     onSubmit: onSubmit,
-    currentUser: currentUser
+    currentUser: currentUser,
+    isSubmitting: isSubmitting
   }) : /*#__PURE__*/_react.default.createElement(_SignIn.default, null), error && /*#__PURE__*/_react.default.createElement(_ErrorMessage.default, {
     message: error,
     onClick: () => setError(null)
@@ -52468,7 +52479,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64412" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53462" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

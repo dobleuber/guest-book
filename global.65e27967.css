@@ -111,7 +111,37 @@ button:active {
   border-color: var(--secondary);
   top: 1px;
 }
+button:disabled {
+  background: var(--gray);
+  border-color: var(--gray);
+  color: var(--fg);
+  cursor: not-allowed;
+}
 
+.submitting {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.loader {
+  border: 0.5em solid var(--secondary);
+  border-top: 0.5em solid var(--tertiary);
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  animation: spin 2s linear infinite;
+  margin-left: 0.5em;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .is-premium {
   --borderWidth: 3px;
   position: relative;
